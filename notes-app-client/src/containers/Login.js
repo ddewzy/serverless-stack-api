@@ -14,7 +14,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: "",
-    password: ""
+    password: "",
   });
 
   function validateForm() {
@@ -27,9 +27,11 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      await Auth.signIn(fields.email, fields.password);
+      let response = await Auth.signIn(fields.email, fields.password);
+      console.log(response);
       userHasAuthenticated(true);
-      history.push("/");
+
+      // history.push("/");
     } catch (e) {
       onError(e);
       setIsLoading(false);

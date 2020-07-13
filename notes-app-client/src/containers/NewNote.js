@@ -1,22 +1,29 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import { onError } from "../libs/errorLib";
 import config from "../config";
 import "./NewNote.css";
-import { API } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
+import { s3Upload } from "../libs/awsLib";
 
 export default function NewNote() {
   const file = useRef(null);
   const history = useHistory();
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [userId, setUserId] = useState("");
   function validateForm() {
     return content.length > 0;
   }
 
+  useEffect(async () => {
+    const response = await Auth.currentSession();
+    console.log(response);
+    setUserId(response.idToken.payload.sub);
+  }, []);
+  console.log(userId);
   function handleFileChange(event) {
     file.current = event.target.files[0];
   }
@@ -36,8 +43,10 @@ export default function NewNote() {
     setIsLoading(true);
 
     try {
-      await createNote({ content });
-      history.push("/");
+      const attachment = file.current ? await s3Upload(file.current) : null;
+
+      await createNote({ content, attachment, userId });
+      // history.push("/");
     } catch (e) {
       onError(e);
       setIsLoading(false);
