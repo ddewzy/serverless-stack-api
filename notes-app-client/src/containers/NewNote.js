@@ -13,17 +13,18 @@ export default function NewNote() {
   const history = useHistory();
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [userId, setUserId] = useState("");
+  // const [userId, setUserId] = useState("1");
+
   function validateForm() {
     return content.length > 0;
   }
 
-  useEffect(async () => {
-    const response = await Auth.currentSession();
-    console.log(response);
-    setUserId(response.idToken.payload.sub);
-  }, []);
-  console.log(userId);
+  // useEffect(async () => {
+  //   const response = await Auth.currentSession();
+  //   console.log(response);
+  //   setUserId(response.idToken.payload.sub);
+  // }, []);
+  // console.log(userId);
   function handleFileChange(event) {
     file.current = event.target.files[0];
   }
@@ -45,8 +46,8 @@ export default function NewNote() {
     try {
       const attachment = file.current ? await s3Upload(file.current) : null;
 
-      await createNote({ content, attachment, userId });
-      // history.push("/");
+      await createNote({ content, attachment /*userId*/ });
+      history.push("/");
     } catch (e) {
       onError(e);
       setIsLoading(false);

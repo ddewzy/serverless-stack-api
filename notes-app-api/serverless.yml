@@ -1,4 +1,4 @@
-service: notes-app-api
+service: dalene-notes-app-api
 
 # Create an optimized package for our functions
 package:
@@ -20,6 +20,7 @@ provider:
   environment:
     tableName: notes
     stripeSecretKey: ${env:STRIPE_SECRET_KEY}
+
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
   iamRoleStatements:

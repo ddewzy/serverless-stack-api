@@ -27,11 +27,9 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      let response = await Auth.signIn(fields.email, fields.password);
-      console.log(response);
+      await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
-
-      // history.push("/");
+      history.push("/");
     } catch (e) {
       onError(e);
       setIsLoading(false);

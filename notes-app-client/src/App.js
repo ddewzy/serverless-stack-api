@@ -35,7 +35,7 @@ function App() {
 
     userHasAuthenticated(false);
 
-    // history.push("/login");
+    history.push("/login");
   }
 
   return (
@@ -51,7 +51,12 @@ function App() {
           <Navbar.Collapse>
             <Nav pullRight>
               {isAuthenticated ? (
-                <NavItem onClick={handleLogout}>Logout</NavItem>
+                <>
+                  <LinkContainer to="/settings">
+                    <NavItem>Settings</NavItem>
+                  </LinkContainer>
+                  <NavItem onClick={handleLogout}>Logout</NavItem>
+                </>
               ) : (
                 <>
                   <LinkContainer to="/signup">
